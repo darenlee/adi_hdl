@@ -45,6 +45,7 @@ adi_add_bus "s_axis" "slave" \
 	[list {"s_axis_ready" "TREADY"} \
 	  {"s_axis_valid" "TVALID"} \
 	  {"s_axis_data" "TDATA"} \
+	  {"s_axis_last" "TLAST"} \
 	  {"s_axis_user" "TUSER"} ]
 adi_add_bus_clock "s_axis_aclk" "s_axis"
 
@@ -53,7 +54,8 @@ adi_add_bus "m_axis" "master" \
 	"xilinx.com:interface:axis:1.0" \
 	[list {"m_axis_ready" "TREADY"} \
 	  {"m_axis_valid" "TVALID"} \
-	  {"m_axis_data" "TDATA"} ]
+	  {"m_axis_data" "TDATA"} \
+	  {"m_axis_last" "TLAST"} ]
 adi_add_bus_clock "m_axis_aclk" "m_axis"
 
 adi_set_bus_dependency "m_src_axi" "m_src_axi" \
@@ -145,8 +147,9 @@ adi_add_bus_clock "fifo_rd_clk" "fifo_rd"
 adi_set_bus_dependency "fifo_rd" "fifo_rd" \
 	"(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 2)"
 
-foreach port {"m_dest_axi_aresetn" "m_src_axi_aresetn" "s_axis_valid" \
-	"s_axis_data" "m_axis_ready" "fifo_wr_en" "fifo_wr_din" "fifo_rd_en"} {
+foreach port {"m_dest_axi_aresetn" "m_src_axi_aresetn" \
+  "s_axis_valid" "s_axis_data" "s_axis_last" "m_axis_ready" \
+  "fifo_wr_en" "fifo_wr_din" "fifo_rd_en"} {
 	set_property DRIVER_VALUE "0" [ipx::get_ports $port]
 }
 
