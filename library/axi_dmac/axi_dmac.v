@@ -231,6 +231,17 @@ localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
   (FIFO_SIZE) > 1 ? 2 : 1;
 localparam DBG_ID_PADDING = ID_WIDTH > 8 ? 0 : 8 - ID_WIDTH;
 
+reg [3:0] reset_shift = 4'b1111;
+wire reset_n = ~reset_shift[0];
+
+always @(posedge s_axi_aclk or negedge s_axi_aresetn) begin
+  if (s_axi_aresetn == 1'b0) begin
+    reset_shift <= 4'b1111;
+  end else begin
+    reset_shift <= {1'b0,reset_shift[3:1]};
+  end
+end
+
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
 reg          up_wack = 1'b0;
@@ -310,7 +321,7 @@ up_axi #(
   .AXI_ADDRESS_WIDTH (12),
   .ADDRESS_WIDTH (9)
 ) i_up_axi (
-  .up_rstn(s_axi_aresetn),
+  .up_rstn(reset_n),
   .up_clk(s_axi_aclk),
   .up_axi_awvalid(s_axi_awvalid),
   .up_axi_awaddr(s_axi_awaddr),
@@ -346,7 +357,7 @@ assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[
 
 always @(posedge s_axi_aclk)
 begin
-  if (s_axi_aresetn == 1'b0)
+  if (reset_n == 1'b0)
     irq <= 1'b0;
   else
     irq <= |up_irq_pending;
@@ -354,7 +365,7 @@ end
 
 always @(posedge s_axi_aclk)
 begin
-  if (s_axi_aresetn == 1'b0) begin
+  if (reset_n == 1'b0) begin
     up_irq_source <= 2'b00;
   end else begin
     up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
@@ -365,7 +376,7 @@ end
 
 always @(posedge s_axi_aclk)
 begin
-  if (s_axi_aresetn == 1'b0) begin
+  if (reset_n == 1'b0) begin
     up_enable <= 'h00;
     up_pause <= 'h00;
     up_dma_src_address <= 'h00;
@@ -428,7 +439,7 @@ assign dbg_ids1 = {
 
 always @(posedge s_axi_aclk)
 begin
-  if (s_axi_aresetn == 1'b0) begin
+  if (reset_n == 1'b0) begin
     up_rack <= 'd0;
   end else begin
     up_rack <= up_rreq;
@@ -472,7 +483,7 @@ end
 // Request ID and Request done bitmap handling
 always @(posedge s_axi_aclk)
 begin
-  if (s_axi_aresetn == 1'b0 || up_enable == 1'b0) begin
+  if (reset_n == 1'b0 || up_enable == 1'b0) begin
     up_transfer_id <= 'h0;
     up_transfer_id_eot <= 'h0;
     up_transfer_done_bitmap <= 'h0;
@@ -509,7 +520,7 @@ dmac_2d_transfer #(
   .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC)
 ) i_2d_transfer (
   .req_aclk(s_axi_aclk),
-  .req_aresetn(s_axi_aresetn),
+  .req_aresetn(reset_n),
 
   .req_eot(up_req_eot),
 
@@ -564,7 +575,7 @@ dmac_request_arb #(
   .AXI_LENGTH_WIDTH(8-(4*DMA_AXI_PROTOCOL_SRC))
 ) i_request_arb (
   .req_aclk(s_axi_aclk),
-  .req_aresetn(s_axi_aresetn),
+  .req_aresetn(reset_n),
 
   .enable(up_enable),
   .pause(up_pause),
