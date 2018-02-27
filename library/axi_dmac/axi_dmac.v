@@ -231,16 +231,33 @@ localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
   (FIFO_SIZE) > 1 ? 2 : 1;
 localparam DBG_ID_PADDING = ID_WIDTH > 8 ? 0 : 8 - ID_WIDTH;
 
-reg [3:0] reset_shift = 4'b1111;
-wire reset_n = ~reset_shift[0];
+/* AXI3 supports a maximum of 16 beats per burst. AXI4 supports a maximum of
+   256 beats per burst. If either bus is AXI3 set the maximum number of beats
+   per burst to 16. For non AXI interfaces the maximum beats per burst is in
+   theory unlimted. Set it to 1024 to provide a reasonable upper threshold */
+localparam BEATS_PER_BURST_LIMIT_DEST =
+  (DMA_TYPE_DEST == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_DEST == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_DEST =
+    BEATS_PER_BURST_LIMIT_DEST * DMA_DATA_WIDTH_DEST / 8;
+localparam BEATS_PER_BURST_LIMIT_SRC =
+  (DMA_TYPE_SRC == DMA_TYPE_AXI_MM) ?
+    (DMA_AXI_PROTOCOL_SRC == 1 ? 16 : 256) :
+    1024;
+localparam BYTES_PER_BURST_LIMIT_SRC =
+    BEATS_PER_BURST_LIMIT_SRC * DMA_DATA_WIDTH_SRC / 8;
 
-always @(posedge s_axi_aclk or negedge s_axi_aresetn) begin
-  if (s_axi_aresetn == 1'b0) begin
-    reset_shift <= 4'b1111;
-  end else begin
-    reset_shift <= {1'b0,reset_shift[3:1]};
-  end
-end
+/* The smaller bus limits the maximum bytes per burst. */
+localparam BYTES_PER_BURST_LIMIT =
+  (BYTES_PER_BURST_LIMIT_DEST < BYTES_PER_BURST_LIMIT_SRC) ?
+  BYTES_PER_BURST_LIMIT_DEST : BYTES_PER_BURST_LIMIT_SRC;
+
+/* Make sure the requested MAX_BYTES_PER_BURST does not exceed what the
+   interfaces can support. Limit the value if necessary. */
+localparam REAL_MAX_BYTES_PER_BURST =
+  BYTES_PER_BURST_LIMIT < MAX_BYTES_PER_BURST ?
+    BYTES_PER_BURST_LIMIT : MAX_BYTES_PER_BURST;
 
 // Register interface signals
 reg  [31:0]  up_rdata = 'd0;
@@ -321,7 +338,7 @@ up_axi #(
   .AXI_ADDRESS_WIDTH (12),
   .ADDRESS_WIDTH (9)
 ) i_up_axi (
-  .up_rstn(reset_n),
+  .up_rstn(s_axi_aresetn),
   .up_clk(s_axi_aclk),
   .up_axi_awvalid(s_axi_awvalid),
   .up_axi_awaddr(s_axi_awaddr),
@@ -357,7 +374,7 @@ assign up_irq_source_clear = (up_wreq == 1'b1 && up_waddr == 9'h021) ? up_wdata[
 
 always @(posedge s_axi_aclk)
 begin
-  if (reset_n == 1'b0)
+  if (s_axi_aresetn == 1'b0)
     irq <= 1'b0;
   else
     irq <= |up_irq_pending;
@@ -365,7 +382,7 @@ end
 
 always @(posedge s_axi_aclk)
 begin
-  if (reset_n == 1'b0) begin
+  if (s_axi_aresetn == 1'b0) begin
     up_irq_source <= 2'b00;
   end else begin
     up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
@@ -376,7 +393,7 @@ end
 
 always @(posedge s_axi_aclk)
 begin
-  if (reset_n == 1'b0) begin
+  if (s_axi_aresetn == 1'b0) begin
     up_enable <= 'h00;
     up_pause <= 'h00;
     up_dma_src_address <= 'h00;
@@ -439,7 +456,7 @@ assign dbg_ids1 = {
 
 always @(posedge s_axi_aclk)
 begin
-  if (reset_n == 1'b0) begin
+  if (s_axi_aresetn == 1'b0) begin
     up_rack <= 'd0;
   end else begin
     up_rack <= up_rreq;
@@ -483,7 +500,7 @@ end
 // Request ID and Request done bitmap handling
 always @(posedge s_axi_aclk)
 begin
-  if (reset_n == 1'b0 || up_enable == 1'b0) begin
+  if (s_axi_aresetn == 1'b0 || up_enable == 1'b0) begin
     up_transfer_id <= 'h0;
     up_transfer_id_eot <= 'h0;
     up_transfer_done_bitmap <= 'h0;
@@ -520,7 +537,7 @@ dmac_2d_transfer #(
   .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC)
 ) i_2d_transfer (
   .req_aclk(s_axi_aclk),
-  .req_aresetn(reset_n),
+  .req_aresetn(s_axi_aresetn),
 
   .req_eot(up_req_eot),
 
@@ -569,14 +586,14 @@ dmac_request_arb #(
   .ASYNC_CLK_DEST_REQ(ASYNC_CLK_DEST_REQ),
   .AXI_SLICE_DEST(AXI_SLICE_DEST),
   .AXI_SLICE_SRC(AXI_SLICE_SRC),
-  .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
+  .MAX_BYTES_PER_BURST(REAL_MAX_BYTES_PER_BURST),
   .FIFO_SIZE(FIFO_SIZE),
   .ID_WIDTH(ID_WIDTH),
   .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
   .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST))
 ) i_request_arb (
   .req_aclk(s_axi_aclk),
-  .req_aresetn(reset_n),
+  .req_aresetn(s_axi_aresetn),
 
   .enable(up_enable),
   .pause(up_pause),
