@@ -126,7 +126,13 @@ module up_axi (
   reg             up_wreq = 'd0;
   reg     [AW:0]  up_waddr = 'd0;
   reg     [31:0]  up_wdata = 'd0;
+<<<<<<< HEAD
   reg     [ 4:0]  up_wcount = 'd0;
+=======
+  reg     [ 2:0]  up_wcount = 'd0;
+  reg             up_wack_int = 'd0;
+  reg             up_wack_int_d = 'd0;
+>>>>>>> 84e26bfaac6d59fe12469cc939e4e059a8aaeb67
   reg             up_axi_arready = 'd0;
   reg             up_axi_rvalid = 'd0;
   reg     [31:0]  up_axi_rdata = 'd0;
@@ -165,7 +171,11 @@ module up_axi (
       end
       if ((up_axi_bready == 1'b1) && (up_axi_bvalid == 1'b1)) begin
         up_axi_bvalid <= 1'b0;
+<<<<<<< HEAD
       end else if (up_wack_d == 1'b1) begin
+=======
+      end else if (up_wack_int_d == 1'b1) begin
+>>>>>>> 84e26bfaac6d59fe12469cc939e4e059a8aaeb67
         up_axi_bvalid <= 1'b1;
       end
     end
@@ -196,13 +206,29 @@ module up_axi (
         up_waddr <= up_axi_awaddr[AW+2:2];
         up_wdata <= up_axi_wdata;
       end
+<<<<<<< HEAD
       if (up_wack_s == 1'b1) begin
         up_wcount <= 5'h00;
       end else if (up_wcount[4] == 1'b1) begin
         up_wcount <= up_wcount + 1'b1;
       end else if (up_wreq == 1'b1) begin
         up_wcount <= 5'h10;
+=======
+    end
+  end
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_wack_int <= 'd0;
+      up_wack_int_d <= 'd0;
+    end else begin
+      if ((up_wcount == 3'h7) && (up_wack == 1'b0)) begin
+        up_wack_int <= 1'b1;
+      end else if (up_wsel == 1'b1) begin
+        up_wack_int <= up_wack;
+>>>>>>> 84e26bfaac6d59fe12469cc939e4e059a8aaeb67
       end
+      up_wack_int_d <= up_wack_int;
     end
   end
 
