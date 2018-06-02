@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -379,7 +379,13 @@ module axi_ad9152_channel #(
   
   // single channel processor
 
-  up_dac_channel #(.CHANNEL_ID(CHANNEL_ID)) i_up_dac_channel (
+  up_dac_channel #(
+    .COMMON_ID (6'h11),
+    .CHANNEL_ID(CHANNEL_ID),
+    .DDS_DISABLE (0),
+    .USERPORTS_DISABLE (0),
+    .IQCORRECTION_DISABLE (0))
+  i_up_dac_channel (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),

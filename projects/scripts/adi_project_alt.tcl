@@ -5,7 +5,7 @@ variable version
 
 set family "none"
 set device "none"
-set version "16.1.2"
+set version "17.1.1"
 
 proc adi_project_altera {project_name} {
 
@@ -31,6 +31,12 @@ proc adi_project_altera {project_name} {
   if [regexp "_c5soc$" $project_name] {
     set family "Cyclone V"
     set device 5CSXFC6D6F31C8ES
+    set system_qip_file system_bd/synthesis/system_bd.qip
+  }
+
+  if [regexp "de10nano$" $project_name] {
+    set family "Cyclone V"
+    set device 5CSEBA6U23I7DK 
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
@@ -139,7 +145,6 @@ proc adi_project_altera {project_name} {
 
   # globals
 
-  set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
   set_global_assignment -name SYNCHRONIZER_IDENTIFICATION AUTO
   set_global_assignment -name ENABLE_ADVANCED_IO_TIMING ON
   set_global_assignment -name USE_TIMEQUEST_TIMING_ANALYZER ON

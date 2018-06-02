@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -138,7 +138,6 @@ module system_top (
   wire    [ 63:0]   gpio_o;
   wire    [ 63:0]   gpio_t;
   wire    [  7:0]   spi_csn;
-  wire              spi_clk;
   wire              spi_mosi;
   wire              spi_miso;
   wire              rx_ref_clk_0;
@@ -162,6 +161,11 @@ module system_top (
   assign arst_0 = 1'b0;
   assign psync_0 = psync;
   assign psync_1 = psync;
+
+  assign gpio_i[63:47]= gpio_o[63:47];
+  assign gpio_i[45:45]= gpio_o[45:45];
+  assign gpio_i[37:36]= gpio_o[37:36];
+  assign gpio_i[33:21]= gpio_o[33:21];
 
   // lvds buffers
 

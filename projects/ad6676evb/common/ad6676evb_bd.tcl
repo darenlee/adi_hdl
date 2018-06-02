@@ -8,8 +8,8 @@ ad_ip_parameter axi_ad6676_xcvr CONFIG.NUM_OF_LANES 2
 ad_ip_parameter axi_ad6676_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_ad6676_xcvr CONFIG.TX_OR_RX_N 0
 ad_ip_parameter axi_ad6676_xcvr CONFIG.LPM_OR_DFE_N 0
-ad_ip_parameter axi_ad6676_xcvr CONFIG.SYS_CLK_SEL "00"
-ad_ip_parameter axi_ad6676_xcvr CONFIG.OUT_CLK_SEL "100"
+ad_ip_parameter axi_ad6676_xcvr CONFIG.SYS_CLK_SEL 0x0
+ad_ip_parameter axi_ad6676_xcvr CONFIG.OUT_CLK_SEL 0x4
 
 adi_axi_jesd204_rx_create axi_ad6676_jesd 2
 
@@ -34,14 +34,13 @@ ad_ip_parameter axi_ad6676_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 # transceiver core
 
 ad_ip_instance util_adxcvr util_ad6676_xcvr
-ad_ip_parameter util_ad6676_xcvr CONFIG.QPLL_FBDIV 0x80
 ad_ip_parameter util_ad6676_xcvr CONFIG.CPLL_FBDIV 2
 ad_ip_parameter util_ad6676_xcvr CONFIG.CPLL_FBDIV_4_5 5
 ad_ip_parameter util_ad6676_xcvr CONFIG.TX_NUM_OF_LANES 0
 ad_ip_parameter util_ad6676_xcvr CONFIG.RX_NUM_OF_LANES 2
 ad_ip_parameter util_ad6676_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_ad6676_xcvr CONFIG.RX_CLK25_DIV 8
-ad_ip_parameter util_ad6676_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
+ad_ip_parameter util_ad6676_xcvr CONFIG.RX_DFE_LPM_CFG 0x0954
 ad_ip_parameter util_ad6676_xcvr CONFIG.RX_CDR_CFG 0x03000023ff20400020
 
 # reference clocks & resets

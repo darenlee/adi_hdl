@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -336,7 +336,9 @@ module axi_ad9361_rx #(
     .ID (ID),
     .CONFIG (CONFIG),
     .DRP_DISABLE (1),
-    .USERPORTS_DISABLE (USERPORTS_DISABLE))
+    .USERPORTS_DISABLE (USERPORTS_DISABLE),
+    .GPIO_DISABLE (0),
+    .START_CODE_DISABLE (0))
   i_up_adc_common (
     .mmcm_rst (mmcm_rst),
     .adc_clk (adc_clk),

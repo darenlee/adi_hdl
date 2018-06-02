@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -37,8 +37,7 @@
 
 module axi_ad9680 #(
 
-  parameter ID = 0,
-  parameter IO_DELAY_GROUP = "adc_if_delay_group") (
+  parameter ID = 0) (
 
   // jesd interface 
   // rx_clk is (line-rate/40)
@@ -213,7 +212,15 @@ module axi_ad9680 #(
 
   // common processor control
 
-  up_adc_common #(.ID(ID)) i_up_adc_common (
+  up_adc_common #(
+    .ID(ID),
+    .CONFIG (0),
+    .COMMON_ID (6'h00),
+    .DRP_DISABLE (6'h00),
+    .USERPORTS_DISABLE (0),
+    .GPIO_DISABLE (0),
+    .START_CODE_DISABLE(0))
+  i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -228,6 +235,9 @@ module axi_ad9680 #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
+    .up_pps_rcounter(32'd0),
+    .up_pps_status(1'd0),
+    .up_pps_irq_mask(),
     .up_adc_ce (),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),

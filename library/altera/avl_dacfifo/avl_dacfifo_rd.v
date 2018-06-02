@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -141,6 +141,7 @@ module avl_dacfifo_rd #(
   wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_raddr_g2b_s;
   wire        [DAC_MEM_ADDRESS_WIDTH-1:0]   avl_mem_laddr_s;
   wire                                      avl_read_int_s;
+  wire                                      avl_end_of_burst_s;
 
   wire                                      dac_fifo_reset_s;
   wire        [DAC_MEM_ADDRESS_WIDTH:0]     dac_mem_addr_diff_s;
@@ -438,6 +439,7 @@ module avl_dacfifo_rd #(
     .addra (dac_mem_laddr_waddr),
     .dina (dac_mem_laddr),
     .clkb (dac_clk),
+    .reb (1'b1),
     .addrb (dac_mem_laddr_raddr),
     .doutb (dac_mem_laddr_s));
 
@@ -477,9 +479,9 @@ module avl_dacfifo_rd #(
         dac_mem_valid <= 1'b0;
     end else begin
       if (dac_mem_dunf_s == 1'b1) begin
-        dac_mem_renable = 1'b0;
+        dac_mem_renable <= 1'b0;
       end else if (dac_mem_addr_diff >= DAC_MEM_THRESHOLD) begin
-        dac_mem_renable = 1'b1;
+        dac_mem_renable <= 1'b1;
       end
       dac_mem_valid <= (dac_mem_renable) ? dac_valid : 1'b0;
     end

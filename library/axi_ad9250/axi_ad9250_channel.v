@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -38,7 +38,6 @@
 
 module axi_ad9250_channel #(
 
-  parameter Q_OR_I_N = 0,
   parameter CHANNEL_ID = 0) (
 
   // adc interface

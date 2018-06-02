@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -144,10 +144,6 @@ module axi_hdmi_tx_core #(
   reg             hdmi_24_csc_vsync_data_e = 'd0;
   reg             hdmi_24_csc_data_e = 'd0;
   reg     [23:0]  hdmi_24_csc_data = 'd0;
-  reg             hdmi_24_hsync_data_e = 'd0;
-  reg             hdmi_24_vsync_data_e = 'd0;
-  reg             hdmi_16_hsync_data_e = 'd0;
-  reg             hdmi_16_vsync_data_e = 'd0;
   reg             hdmi_16_hsync_d = 'd0;
   reg             hdmi_16_vsync_d = 'd0;
   reg             hdmi_16_hsync_data_e_d = 'd0;
@@ -466,15 +462,11 @@ module axi_hdmi_tx_core #(
 
     hdmi_24_hsync <= hdmi_clip_hs_d;
     hdmi_24_vsync <= hdmi_clip_vs_d;
-    hdmi_24_hsync_data_e <= hdmi_clip_hs_de_d;
-    hdmi_24_vsync_data_e <= hdmi_clip_vs_de_d;
     hdmi_24_data_e <= hdmi_clip_de_d;
     hdmi_24_data <= hdmi_clip_data;
 
     hdmi_16_hsync <= hdmi_16_hsync_d;
     hdmi_16_vsync <= hdmi_16_vsync_d;
-    hdmi_16_hsync_data_e <= hdmi_16_hsync_data_e_d;
-    hdmi_16_vsync_data_e <= hdmi_16_vsync_data_e_d;
     hdmi_16_data_e <= hdmi_16_data_e_d;
     hdmi_16_data <= hdmi_16_data_d;
     hdmi_16_es_data <= hdmi_es_data_s;
@@ -521,6 +513,7 @@ module axi_hdmi_tx_core #(
     .addra (vdma_waddr),
     .dina (vdma_wdata),
     .clkb (hdmi_clk),
+    .reb (1'b1),
     .addrb (hdmi_raddr[9:1]),
     .doutb (hdmi_rdata_s));
 

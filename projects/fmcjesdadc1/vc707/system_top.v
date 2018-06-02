@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -109,7 +109,6 @@ module system_top (
   wire            spi_miso;
   wire            rx_ref_clk;
   wire            rx_clk;
-  wire            rx_sysref;
 
   assign ddr3_1_p = 2'b11;
   assign ddr3_1_n = 3'b000;

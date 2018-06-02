@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -62,7 +62,7 @@ module dmac_request_arb #(
   input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
   input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
   input [DMA_LENGTH_WIDTH-1:0] req_length,
-        input req_xlast,
+  input req_xlast,
   input req_sync_transfer_start,
 
   output reg eot,
@@ -89,9 +89,9 @@ module dmac_request_arb #(
   // Write data
   output [DMA_DATA_WIDTH_DEST-1:0]     m_axi_wdata,
   output [(DMA_DATA_WIDTH_DEST/8)-1:0] m_axi_wstrb,
-  input                               m_axi_wready,
-  output                              m_axi_wvalid,
-  output                              m_axi_wlast,
+  input                                m_axi_wready,
+  output                               m_axi_wvalid,
+  output                               m_axi_wlast,
 
   // Write response
   input                               m_axi_bvalid,
@@ -109,7 +109,7 @@ module dmac_request_arb #(
   output [ 3:0]                       m_axi_arcache,
 
   // Read data and response
-  input  [DMA_DATA_WIDTH_SRC-1:0]   m_axi_rdata,
+  input  [DMA_DATA_WIDTH_SRC-1:0]     m_axi_rdata,
   output                              m_axi_rready,
   input                               m_axi_rvalid,
   input  [ 1:0]                       m_axi_rresp,
@@ -118,7 +118,8 @@ module dmac_request_arb #(
   input                               s_axis_aclk,
   output                              s_axis_ready,
   input                               s_axis_valid,
-  input  [DMA_DATA_WIDTH_SRC-1:0]   s_axis_data,
+  input  [DMA_DATA_WIDTH_SRC-1:0]     s_axis_data,
+  input                               s_axis_last,
   input                               s_axis_last,
   input  [0:0]                        s_axis_user,
   output                              s_axis_xfer_req,
@@ -127,14 +128,14 @@ module dmac_request_arb #(
   input                               m_axis_aclk,
   input                               m_axis_ready,
   output                              m_axis_valid,
-  output [DMA_DATA_WIDTH_DEST-1:0]  m_axis_data,
-        output                              m_axis_last,
-        output                              m_axis_xfer_req,
+  output [DMA_DATA_WIDTH_DEST-1:0]    m_axis_data,
+  output                              m_axis_last,
+  output                              m_axis_xfer_req,
 
   // Input FIFO interface
   input                               fifo_wr_clk,
   input                               fifo_wr_en,
-  input  [DMA_DATA_WIDTH_SRC-1:0]   fifo_wr_din,
+  input  [DMA_DATA_WIDTH_SRC-1:0]     fifo_wr_din,
   output                              fifo_wr_overflow,
   input                               fifo_wr_sync,
   output                              fifo_wr_xfer_req,
@@ -143,18 +144,18 @@ module dmac_request_arb #(
   input                               fifo_rd_clk,
   input                               fifo_rd_en,
   output                              fifo_rd_valid,
-  output [DMA_DATA_WIDTH_DEST-1:0]  fifo_rd_dout,
+  output [DMA_DATA_WIDTH_DEST-1:0]    fifo_rd_dout,
   output                              fifo_rd_underflow,
-        output                              fifo_rd_xfer_req,
+  output                              fifo_rd_xfer_req,
 
-  output [ID_WIDTH-1:0]        dbg_dest_request_id,
-  output [ID_WIDTH-1:0]        dbg_dest_address_id,
-  output [ID_WIDTH-1:0]        dbg_dest_data_id,
-  output [ID_WIDTH-1:0]        dbg_dest_response_id,
-  output [ID_WIDTH-1:0]        dbg_src_request_id,
-  output [ID_WIDTH-1:0]        dbg_src_address_id,
-  output [ID_WIDTH-1:0]        dbg_src_data_id,
-  output [ID_WIDTH-1:0]        dbg_src_response_id,
+  output [ID_WIDTH-1:0]               dbg_dest_request_id,
+  output [ID_WIDTH-1:0]               dbg_dest_address_id,
+  output [ID_WIDTH-1:0]               dbg_dest_data_id,
+  output [ID_WIDTH-1:0]               dbg_dest_response_id,
+  output [ID_WIDTH-1:0]               dbg_src_request_id,
+  output [ID_WIDTH-1:0]               dbg_src_address_id,
+  output [ID_WIDTH-1:0]               dbg_src_data_id,
+  output [ID_WIDTH-1:0]               dbg_src_response_id,
   output [7:0]                        dbg_status
 );
 
@@ -193,12 +194,10 @@ wire sync_id_ret_src;
 
 wire dest_enable;
 wire dest_enabled;
-wire dest_pause;
 wire dest_sync_id;
 wire dest_sync_id_ret;
 wire src_enable;
 wire src_enabled;
-wire src_pause;
 wire src_sync_id;
 wire src_sync_id_ret;
 
@@ -412,7 +411,6 @@ dmac_dest_mm_axi #(
 
   .enable(dest_enable),
   .enabled(dest_enabled),
-  .pause(dest_pause),
 
   .req_valid(dest_req_valid),
   .req_ready(dest_req_ready),
@@ -504,7 +502,7 @@ dmac_dest_axi_stream #(
   .req_valid(dest_req_valid),
   .req_ready(dest_req_ready),
   .req_last_burst_length(dest_req_last_burst_length),
-        .req_xlast(dest_req_xlast),
+  .req_xlast(dest_req_xlast),
 
   .response_valid(dest_response_valid),
   .response_ready(dest_response_ready),
@@ -516,7 +514,7 @@ dmac_dest_axi_stream #(
   .data_id(data_id),
   .sync_id(dest_sync_id),
   .sync_id_ret(dest_sync_id_ret),
-        .xfer_req(m_axis_xfer_req),
+  .xfer_req(m_axis_xfer_req),
 
   .data_eot(data_eot),
   .response_eot(response_eot),
@@ -528,7 +526,7 @@ dmac_dest_axi_stream #(
   .m_axis_valid(m_axis_valid),
   .m_axis_ready(m_axis_ready),
   .m_axis_data(m_axis_data),
-        .m_axis_last(m_axis_last)
+  .m_axis_last(m_axis_last)
 );
 
 end else begin
@@ -589,7 +587,7 @@ dmac_dest_fifo_inf #(
   .valid(fifo_rd_valid),
   .dout(fifo_rd_dout),
   .underflow(fifo_rd_underflow),
-        .xfer_req(fifo_rd_xfer_req)
+  .xfer_req(fifo_rd_xfer_req)
 );
 
 end else begin
@@ -624,7 +622,6 @@ dmac_src_mm_axi #(
   .m_axi_aclk(m_src_axi_aclk),
   .m_axi_aresetn(src_resetn),
 
-  .pause(src_pause),
   .enable(src_enable),
   .enabled(src_enabled),
   .sync_id(src_sync_id),
@@ -843,7 +840,7 @@ util_axis_resize #(
   .MASTER_DATA_WIDTH(DMA_DATA_WIDTH)
 ) i_src_repack (
   .clk(src_clk),
-  .resetn(src_resetn & src_enable),
+  .resetn(src_resetn & ~src_sync_id),
   .s_valid(src_fifo_valid),
   .s_ready(src_fifo_ready),
   .s_data(src_fifo_data),
@@ -878,7 +875,7 @@ util_axis_resize #(
   .MASTER_DATA_WIDTH(DMA_DATA_WIDTH_DEST)
 ) i_dest_repack (
   .clk(dest_clk),
-  .resetn(dest_resetn & dest_enable),
+  .resetn(dest_resetn & ~dest_sync_id),
   .s_valid(dest_fifo_valid),
   .s_ready(dest_fifo_ready),
   .s_data(dest_fifo_data),
@@ -1083,13 +1080,13 @@ dmac_request_generator #(
 );
 
 sync_bits #(
-  .NUM_OF_BITS(3),
+  .NUM_OF_BITS(2),
   .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
 ) i_sync_control_dest (
   .out_clk(dest_clk),
   .out_resetn(dest_resetn),
-  .in({do_enable, pause, sync_id}),
-  .out({dest_enable, dest_pause, dest_sync_id})
+  .in({do_enable, sync_id}),
+  .out({dest_enable, dest_sync_id})
 );
 
 sync_bits #(
@@ -1103,13 +1100,13 @@ sync_bits #(
 );
 
 sync_bits #(
-  .NUM_OF_BITS(3),
+  .NUM_OF_BITS(2),
   .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
 ) i_sync_control_src (
   .out_clk(src_clk),
   .out_resetn(src_resetn),
-  .in({do_enable, pause, sync_id}),
-  .out({src_enable, src_pause, src_sync_id})
+  .in({do_enable, sync_id}),
+  .out({src_enable, src_sync_id})
 );
 
 sync_bits #(

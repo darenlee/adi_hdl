@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -228,6 +228,7 @@ module axi_ad9963_tx_channel #(
   // single channel processor
 
   up_dac_channel #(
+    .COMMON_ID (6'h11),
     .CHANNEL_ID(CHANNEL_ID),
     .DDS_DISABLE(DATAPATH_DISABLE),
     .IQCORRECTION_DISABLE(DATAPATH_DISABLE),

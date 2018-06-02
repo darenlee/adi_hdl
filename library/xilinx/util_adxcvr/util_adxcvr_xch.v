@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -2044,10 +2044,10 @@ module util_adxcvr_xch #(
     .CPLLLOCK (cpll_locked_s),
     .CPLLLOCKDETCLK (up_clk),
     .CPLLLOCKEN (1'd1),
-    .CPLLPD (1'b0),
+    .CPLLPD (up_cpll_rst),
     .CPLLREFCLKLOST (),
     .CPLLREFCLKSEL (3'b001),
-    .CPLLRESET (up_cpll_rst),
+    .CPLLRESET (1'b0),
     .DMONFIFORESET (1'd0),
     .DMONITORCLK (1'd0),
     .DMONITOROUT (),

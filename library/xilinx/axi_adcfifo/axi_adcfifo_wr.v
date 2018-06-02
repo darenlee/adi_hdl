@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -408,6 +408,7 @@ module axi_adcfifo_wr #(
     .addra (adc_waddr),
     .dina (adc_wdata),
     .clkb (axi_clk),
+    .reb (1'b1),
     .addrb (axi_raddr),
     .doutb (axi_rdata_s));
 

@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -118,8 +118,6 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
   wire    [ 6:0]  spi_csn_open;
-  wire            spi_mosi;
-  wire            spi_miso;
   wire            rx_ref_clk;
   wire            rx_sysref;
   wire            rx_sync;
@@ -129,6 +127,9 @@ module system_top (
 
   assign fan_pwm = 1'b1;
   assign iic_rstn = 1'b1;
+
+  assign gpio_i[63:42]= gpio_o[63:42];
+  assign gpio_i[31:21]= gpio_o[31:21];
 
   // instantiations
 

@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -98,7 +98,7 @@ dmac_data_mover # (
   .enable(enable),
   .enabled(data_enabled),
   .sync_id(sync_id),
-        .xfer_req(xfer_req),
+  .xfer_req(xfer_req),
 
   .request_id(request_id),
   .response_id(data_id),

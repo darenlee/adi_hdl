@@ -9,7 +9,7 @@ adi_ip_files axi_dac_interpolate [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/ad_iqcor.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
-  "axi_dac_interpolate_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "cic_interp.v" \
   "fir_interp.v" \
   "axi_dac_interpolate_reg.v" \
@@ -18,7 +18,8 @@ adi_ip_files axi_dac_interpolate [list \
 
 adi_ip_properties axi_dac_interpolate
 
-ipx::associate_bus_interfaces -busif s_axi -clock s_axi_aclk [ipx::current_core]
+ipx::infer_bus_interface dac_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface dac_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

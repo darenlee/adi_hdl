@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -37,8 +37,7 @@
 
 module axi_ad6676 #(
 
-  parameter ID = 0,
-  parameter IO_DELAY_GROUP = "adc_if_delay_group") (
+  parameter ID = 0) (
 
   // jesd interface
   // rx_clk is (line-rate/40)
@@ -168,7 +167,7 @@ module axi_ad6676 #(
 
   // channel
 
-  axi_ad6676_channel #(.Q_OR_I_N(0), .CHANNEL_ID(0)) i_channel_0 (
+  axi_ad6676_channel #(.CHANNEL_ID(0)) i_channel_0 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_data (adc_data_0_s),
@@ -191,7 +190,7 @@ module axi_ad6676 #(
 
   // channel
 
-  axi_ad6676_channel #(.Q_OR_I_N(1), .CHANNEL_ID(1)) i_channel_1 (
+  axi_ad6676_channel #(.CHANNEL_ID(1)) i_channel_1 (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_data (adc_data_1_s),
@@ -214,7 +213,15 @@ module axi_ad6676 #(
 
   // common processor control
 
-  up_adc_common #(.ID(ID)) i_up_adc_common (
+  up_adc_common #(
+    .ID(ID),
+    .CONFIG(0),
+    .COMMON_ID(6'h00),
+    .DRP_DISABLE(1),
+    .USERPORTS_DISABLE(1),
+    .GPIO_DISABLE(1),
+    .START_CODE_DISABLE(1))
+  i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
@@ -229,6 +236,9 @@ module axi_ad6676 #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
+    .up_pps_rcounter(32'h0),
+    .up_pps_status(1'b0),
+    .up_pps_irq_mask(),
     .up_adc_ce (),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),

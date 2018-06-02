@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -117,6 +117,8 @@ module system_top (
     .dio_i (gpio_o[14:0]),
     .dio_o (gpio_i[14:0]),
     .dio_p (gpio_bd));
+
+  assign gpio_i[63:15] = gpio_o[63:15];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

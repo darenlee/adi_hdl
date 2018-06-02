@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -87,10 +87,8 @@ module axi_ad9434_core #(
 
   output                  mmcm_rst,
   output                  adc_rst,
+  output                  adc_enable,
   input                   adc_status);
-
-
-  // internal registers
 
   // internal signals
   wire            up_status_pn_err_s;
@@ -149,7 +147,13 @@ module axi_ad9434_core #(
   end
 
   up_adc_common #(
-    .ID(ID))
+    .ID(ID),
+    .CONFIG(0),
+    .COMMON_ID(0),
+    .DRP_DISABLE(0),
+    .USERPORTS_DISABLE(1),
+    .GPIO_DISABLE(1),
+    .START_CODE_DISABLE(1))
   i_adc_common(
     .mmcm_rst (mmcm_rst),
 
@@ -166,6 +170,10 @@ module axi_ad9434_core #(
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
+
+    .up_pps_rcounter(32'h0),
+    .up_pps_status(1'b0),
+    .up_pps_irq_mask(),
 
     .up_adc_ce (),
     .up_status_pn_err (up_status_pn_err_s),
@@ -197,11 +205,15 @@ module axi_ad9434_core #(
     .up_rack (up_rack_s[0]));
 
   up_adc_channel #(
-    .CHANNEL_ID(0))
+    .CHANNEL_ID(0),
+    .USERPORTS_DISABLE(1),
+    .DATAFORMAT_DISABLE(0),
+    .DCFILTER_DISABLE(1),
+    .IQCORRECTION_DISABLE(1))
   i_adc_channel(
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
-    .adc_enable (),
+    .adc_enable (adc_enable),
     .adc_iqcor_enb (),
     .adc_dcfilt_enb (),
     .adc_dfmt_se (adc_dfmt_se_s),

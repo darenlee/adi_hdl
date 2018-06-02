@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -188,8 +188,8 @@ module system_top (
   assign gpio_bd_i = gpio_bd[20:8];
   assign gpio_bd_o = gpio_bd[ 7:0];
 
-  assign spi_csn_ad9528 =  spi_csn[1];
-  assign spi_csn_ad9371 =  spi_csn[0];
+  assign spi_csn_ad9528 =  spi_csn[0];
+  assign spi_csn_ad9371 =  spi_csn[1];
 
   system_wrapper i_system_wrapper (
     .dac_fifo_bypass (gpio_o[60]),

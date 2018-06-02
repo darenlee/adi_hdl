@@ -7,8 +7,7 @@ adi_ip_create util_upack
 adi_ip_files util_upack [list \
   "util_upack_dmx.v" \
   "util_upack_dsf.v" \
-  "util_upack.v" \
-  "util_upack_constr.xdc" ]
+  "util_upack.v" ]
 
 adi_ip_properties_lite util_upack
 
@@ -31,6 +30,9 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CH
   [ipx::get_ports *_7* -of_objects [ipx::current_core]]
 
 ipx::remove_all_bus_interface [ipx::current_core]
+
+ipx::infer_bus_interface dac_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
 ipx::save_core [ipx::current_core]
 
 

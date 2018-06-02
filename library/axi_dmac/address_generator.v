@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -52,22 +52,21 @@ module dmac_address_generator #(
 
   output reg [ID_WIDTH-1:0]  id,
   input [ID_WIDTH-1:0]       request_id,
-  input                        sync_id,
+  input                      sync_id,
 
   input                        eot,
 
   input                        enable,
-  input                        pause,
   output reg                   enabled,
 
-  input                        addr_ready,
-  output reg                   addr_valid,
+  input                           addr_ready,
+  output reg                      addr_valid,
   output     [DMA_ADDR_WIDTH-1:0] addr,
-  output     [LENGTH_WIDTH-1:0] len,
-  output     [ 2:0]            size,
-  output     [ 1:0]            burst,
-  output     [ 2:0]            prot,
-  output     [ 3:0]            cache
+  output     [LENGTH_WIDTH-1:0]   len,
+  output     [ 2:0]               size,
+  output     [ 1:0]               burst,
+  output     [ 2:0]               prot,
+  output     [ 3:0]               cache
 );
 
 localparam MAX_BEATS_PER_BURST = {1'b1,{BEATS_PER_BURST_WIDTH{1'b0}}};

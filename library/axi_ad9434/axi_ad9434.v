@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -38,7 +38,9 @@
 module axi_ad9434 #(
 
   parameter ID = 0,
-  parameter DEVICE_TYPE = SERIES7,
+  
+  // set to 0 for Xilinx 7 Series or 1 for 6 Series
+  parameter DEVICE_TYPE = 0,
   parameter IO_DELAY_GROUP = "dev_if_delay_group") (
 
   // physical interface
@@ -81,10 +83,6 @@ module axi_ad9434 #(
   input                   s_axi_rready,
   input       [ 2:0]      s_axi_awprot,
   input       [ 2:0]      s_axi_arprot);
-
-  localparam SERIES7 = 0;
-  localparam SERIES6 = 1;
-
 
   // internal clocks & resets
   wire            adc_rst;
@@ -129,9 +127,6 @@ module axi_ad9434 #(
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  // single channel always enable
-  assign adc_enable = 1'b1;
-
   axi_ad9434_if #(
     .DEVICE_TYPE(DEVICE_TYPE),
     .IO_DELAY_GROUP(IO_DELAY_GROUP))
@@ -172,6 +167,7 @@ module axi_ad9434 #(
     .adc_or(adc_or_if_s),
     .mmcm_rst (mmcm_rst),
     .adc_rst (adc_rst),
+    .adc_enable(adc_enable),
     .adc_status (adc_status_s),
     .dma_dvalid (adc_valid),
     .dma_data (adc_data),

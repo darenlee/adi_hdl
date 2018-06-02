@@ -1,53 +1,19 @@
 ####################################################################################
-####################################################################################
-## Copyright 2011(c) Analog Devices, Inc.
+## Copyright 2018(c) Analog Devices, Inc.
 ## Auto-generated, do not modify!
 ####################################################################################
-####################################################################################
 
-M_DEPS += ../common/axi_ctrlif.vhd
-M_DEPS += ../common/axi_streaming_dma_tx_fifo.vhd
-M_DEPS += ../common/dma_fifo.vhd
-M_DEPS += ../common/pl330_dma_fifo.vhd
-M_DEPS += ../scripts/adi_env.tcl
-M_DEPS += ../scripts/adi_ip.tcl
-M_DEPS += axi_spdif_tx.vhd
-M_DEPS += axi_spdif_tx_constr.xdc
-M_DEPS += axi_spdif_tx_ip.tcl
-M_DEPS += tx_encoder.vhd
-M_DEPS += tx_package.vhd
+LIBRARY_NAME := axi_spdif_tx
 
-M_VIVADO := vivado -mode batch -source
+GENERIC_DEPS += ../common/axi_ctrlif.vhd
+GENERIC_DEPS += ../common/axi_streaming_dma_tx_fifo.vhd
+GENERIC_DEPS += ../common/dma_fifo.vhd
+GENERIC_DEPS += ../common/pl330_dma_fifo.vhd
+GENERIC_DEPS += axi_spdif_tx.vhd
+GENERIC_DEPS += tx_encoder.vhd
+GENERIC_DEPS += tx_package.vhd
 
-M_FLIST := *.cache
-M_FLIST += *.data
-M_FLIST += *.xpr
-M_FLIST += *.log
-M_FLIST += component.xml
-M_FLIST += *.jou
-M_FLIST +=  xgui
-M_FLIST += *.ip_user_files
-M_FLIST += *.srcs
-M_FLIST += *.hw
-M_FLIST += *.sim
-M_FLIST += .Xil
+XILINX_DEPS += axi_spdif_tx_constr.xdc
+XILINX_DEPS += axi_spdif_tx_ip.tcl
 
-
-
-.PHONY: all clean clean-all
-all: axi_spdif_tx.xpr
-
-
-clean:clean-all
-
-
-clean-all:
-	rm -rf $(M_FLIST)
-
-
-axi_spdif_tx.xpr: $(M_DEPS)
-	-rm -rf $(M_FLIST)
-	$(M_VIVADO) axi_spdif_tx_ip.tcl  >> axi_spdif_tx_ip.log 2>&1
-
-####################################################################################
-####################################################################################
+include ../scripts/library.mk

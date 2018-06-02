@@ -17,6 +17,7 @@ adi_ip_files axi_hdmi_tx [list \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_hdmi_tx.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
@@ -28,6 +29,10 @@ adi_ip_files axi_hdmi_tx [list \
   "axi_hdmi_tx.v" ]
 
 adi_ip_properties axi_hdmi_tx
+
+ipx::infer_bus_interface hdmi_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface hdmi_out_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface vdma_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
 ipx::save_core [ipx::current_core]
 

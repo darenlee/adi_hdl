@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -115,6 +115,9 @@ module system_top (
   wire            rx_sync;
   wire            rx_sysref;
   wire            rx_clk;
+
+  assign gpio_i[63:42]= gpio_o[63:42];
+  assign gpio_i[31:15]= gpio_o[31:15];
 
   // instantiations
 

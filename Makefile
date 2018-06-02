@@ -4,6 +4,9 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 ####################################################################################
+
+include quiet.mk
+
 help:
 	@echo ""
 	@echo "Please specify a target."
@@ -14,37 +17,34 @@ help:
 	@echo "To build a specific project:"
 	@echo "    make proj.board"
 	@echo "e.g.,"
-	@echo "    make fmcomms1.zed"
+	@echo "    make adv7511.zed"
 
 
-PROJECTS := $(filter-out $(NO_PROJ), $(shell ls projects))
-define PROJECT_RULE
-$1.$2:
-	cd projects/$1/$2; make
-endef
-define APROJECT_RULE
-	$(foreach archname,$(shell ls projects/$1), $(eval $(call PROJECT_RULE,$1,$(archname))))
-endef
-$(foreach projname,$(PROJECTS), $(eval $(call APROJECT_RULE,$(projname))))
+PROJECTS := $(filter-out $(NO_PROJ), $(notdir $(wildcard projects/*)))
+SUBPROJECTS := $(foreach projname,$(PROJECTS), \
+	$(foreach archname,$(notdir $(subst /Makefile,,$(wildcard projects/$(projname)/*/Makefile))), \
+		$(projname).$(archname)))
 
+.PHONY: lib all clean clean-all $(SUBPROJECTS)
 
-.PHONY: lib all clean clean-all
+$(SUBPROJECTS):
+	$(MAKE) -C projects/$(subst .,/,$@)
 
 lib:
-	make -C library/ all
+	$(MAKE) -C library/ all
 
 
 all:
-	make -C projects/ all
+	$(MAKE) -C projects/ all
 
 
 clean:
-	make -C projects/ clean
+	$(MAKE) -C projects/ clean
 
 
 clean-all:clean
-	make -C projects/ clean
-	make -C library/ clean
+	$(MAKE) -C projects/ clean
+	$(MAKE) -C library/ clean
 
 ####################################################################################
 ####################################################################################

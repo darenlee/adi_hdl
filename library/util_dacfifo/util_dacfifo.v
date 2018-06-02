@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -108,6 +108,7 @@ module util_dacfifo #(
   wire    [(ADDRESS_WIDTH-1):0]       dma_raddr_g2b_s;
   wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_g2b_s;
   wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_g2b_s;
+  wire                                dac_mem_ren_s;
 
   // DMA / Write interface
 
@@ -163,7 +164,7 @@ module util_dacfifo #(
       dma_xfer_out_bypass <= 1'b0;
     end else begin
       if (dma_wren_s == 1'b1) begin
-        dma_waddr <= dma_waddr + 1;
+        dma_waddr <= dma_waddr + 1'b1;
         dma_xfer_out_fifo <= 1'b0;
       end
       if (dma_xfer_last == 1'b1) begin
@@ -262,10 +263,10 @@ module util_dacfifo #(
       dac_raddr_g <= 'b0;
     end else begin
       if (dac_mem_ren_s == 1'b1) begin
-        if (dac_lastaddr == 'b0) begin
-          dac_raddr <= dac_raddr + 1;
+        if (dac_lastaddr == 'b0 || dac_raddr < dac_lastaddr) begin
+          dac_raddr <= dac_raddr + 1'b1;
         end else begin
-          dac_raddr <= (dac_raddr < dac_lastaddr) ? (dac_raddr + 1) : 'b0;
+          dac_raddr <= 'b0;
         end
       end
       dac_raddr_g <= dac_raddr_b2g_s;
@@ -289,6 +290,7 @@ module util_dacfifo #(
     .addra (dma_waddr),
     .dina (dma_data),
     .clkb (dac_clk),
+    .reb (1'b1),
     .addrb (dac_raddr),
     .doutb (dac_data_s));
 

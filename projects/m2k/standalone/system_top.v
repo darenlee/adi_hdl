@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -194,6 +194,7 @@ module system_top (
     .spi0_clk_o (spi0_clk),
     .spi0_csn_0_o (spi0_csn[0]),
     .spi0_csn_1_o (spi0_csn[1]),
+    .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
     .spi0_sdi_i (spi0_miso),
     .spi0_sdo_i (spi0_mosi),

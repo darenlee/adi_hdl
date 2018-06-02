@@ -6,6 +6,8 @@ source $ad_hdl_dir/library/scripts/adi_ip.tcl
 adi_ip_create axi_dmac
 adi_ip_files axi_dmac [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
+  "inc_id.h" \
+  "resp.h" \
   "address_generator.v" \
   "data_mover.v" \
   "request_arb.v" \
@@ -104,6 +106,27 @@ set dummy_axi_ports [list \
 	"m_src_axi_bvalid" \
 	"m_src_axi_bresp" \
 ]
+
+# These are in the design to keep the Altera tools happy which require
+# certain signals in AXI3 mode even if these are defined as optinal in the standard.
+lappend dummy_axi_ports \
+	"m_dest_axi_awid" \
+	"m_dest_axi_awlock" \
+	"m_dest_axi_wid" \
+	"m_dest_axi_bid" \
+	"m_dest_axi_arid" \
+	"m_dest_axi_arlock" \
+	"m_dest_axi_rid" \
+	"m_dest_axi_rlast" \
+	"m_src_axi_arid" \
+	"m_src_axi_arlock" \
+	"m_src_axi_rid" \
+	"m_src_axi_rlast" \
+	"m_src_axi_awid" \
+	"m_src_axi_awlock" \
+	"m_src_axi_wid" \
+	"m_src_axi_bid"
+
 
 foreach p $dummy_axi_ports {
 	adi_set_ports_dependency $p "false"
@@ -341,6 +364,8 @@ set_property -dict [list \
 ] $p
 
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXI_ADDR_WIDTH" -component $cc]
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_SRC" -component $cc]
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_DEST" -component $cc]
 
 
 ipx::create_xgui_files [ipx::current_core]

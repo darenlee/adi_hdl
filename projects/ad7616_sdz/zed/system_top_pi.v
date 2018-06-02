@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -123,6 +123,10 @@ module system_top (
              adc_hw_rngsel,      // 42:41
              adc_seq_en,         // 37
              adc_chsel}));       // 35:33
+
+  assign gpio_i[63:44] = gpio_o[63:44];
+  assign gpio_i[40:38] = gpio_o[40:38];
+  assign gpio_i[36] = gpio_o[36];
 
   generate
     for (i = 0; i < 16; i = i + 1) begin: adc_db_io

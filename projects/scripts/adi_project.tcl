@@ -7,7 +7,7 @@ variable p_prcfg_list
 variable p_prcfg_status
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2016.4"
+  set REQUIRED_VIVADO_VERSION "2017.4.1"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -77,8 +77,8 @@ proc adi_project_xilinx {project_name {mode 0}} {
     set sys_zynq 1
   }
   if [regexp "_zcu102$" $project_name] {
-    set p_device "xczu9eg-ffvb1156-2-i"
-    set p_board "xilinx.com:zcu102:part0:3.0"
+    set p_device "xczu9eg-ffvb1156-2-e"
+    set p_board "xilinx.com:zcu102:part0:3.1"
     set sys_zynq 2
   }
 
@@ -113,12 +113,8 @@ proc adi_project_xilinx {project_name {mode 0}} {
   set_property ip_repo_paths $lib_dirs [current_fileset]
   update_ip_catalog
 
-  set_msg_config -id {BD 41-1348} -new_severity info
-  set_msg_config -id {BD 41-1343} -new_severity info
-  set_msg_config -id {BD 41-1306} -new_severity info
-  set_msg_config -id {IP_Flow 19-1687} -new_severity info
-  set_msg_config -id {filemgmt 20-1763} -new_severity info
-  set_msg_config -severity {CRITICAL WARNING} -quiet -id {BD 41-1276} -new_severity error
+  ## Load custom message severity definitions
+  source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
 
   create_bd_design "system"
   source system_bd.tcl
@@ -145,9 +141,6 @@ proc adi_project_files {project_name project_files} {
 
 proc adi_project_run {project_name} {
   global ADI_POWER_OPTIMIZATION
-
-  set_property strategy Flow_PerfOptimized_high [get_runs synth_1]
-  set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
 
   launch_runs synth_1
   wait_on_run synth_1

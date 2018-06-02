@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -364,7 +364,8 @@ module axi_ad7616 #(
       .m_axis_valid(m_axis_valid_s),
       .fifo_wr_en(adc_valid),
       .fifo_wr_data(adc_data),
-      .fifo_wr_sync(adc_sync)
+      .fifo_wr_sync(adc_sync),
+      .fifo_wr_xfer_req(1'b1)
     );
 
   end

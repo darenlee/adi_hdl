@@ -3,7 +3,7 @@
 ## check tool version
 
 if {![info exists REQUIRED_VIVADO_VERSION]} {
-  set REQUIRED_VIVADO_VERSION "2016.4"
+  set REQUIRED_VIVADO_VERSION "2017.4.1"
 }
 
 if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
@@ -23,6 +23,7 @@ proc adi_ip_ttcl {ip_name ip_constr_files} {
   set_property -dict [list \
     type ttcl \
   ] $f
+  ipx::reorder_files -front $ip_constr_files $proj_filegroup
 }
 
 proc adi_ip_bd {ip_name ip_bd_files} {
@@ -171,11 +172,8 @@ proc adi_ip_create {ip_name} {
 
   create_project $ip_name . -force
 
-  set_msg_config -id {IP_Flow 19-3656} -new_severity INFO
-  set_msg_config -id {IP_Flow 19-2999} -new_severity INFO 
-  set_msg_config -id {IP_Flow 19-1654} -new_severity INFO 
-  set_msg_config -id {IP_Flow 19-4623} -new_severity INFO 
-  set_msg_config -id {IP_Flow 19-459} -new_severity INFO 
+  ## Load custom message severity definitions
+  source $ad_hdl_dir/projects/scripts/adi_xilinx_msg.tcl
 
   set ip_constr_files ""
   set lib_dirs $ad_hdl_dir/library
@@ -210,7 +208,7 @@ proc adi_ip_properties_lite {ip_name} {
   ipx::package_project -root_dir . -vendor analog.com -library user -taxonomy /Analog_Devices
   set_property name $ip_name [ipx::current_core]
   set_property vendor_display_name {Analog Devices} [ipx::current_core]
-  set_property company_url {www.analog.com} [ipx::current_core]
+  set_property company_url {http://www.analog.com} [ipx::current_core]
 
   set i_families ""
   foreach i_part [get_parts] {
@@ -237,6 +235,7 @@ proc adi_ip_properties_lite {ip_name} {
     set i_module [file tail $i_file]
     regsub {_constr\.xdc} $i_module {} i_module
     ipx::add_file $i_file $i_filegroup
+    ipx::reorder_files -front $i_file $i_filegroup
     set_property SCOPED_TO_REF $i_module [ipx::get_files $i_file -of_objects $i_filegroup]
   }
   ipx::save_core

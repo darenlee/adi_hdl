@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -52,7 +52,6 @@ module dmac_src_mm_axi #(
 
   input                           enable,
   output                          enabled,
-  input                           pause,
   input                           sync_id,
   output                          sync_id_ret,
 
@@ -131,7 +130,6 @@ dmac_address_generator #(
 
   .enable(enable),
   .enabled(address_enabled),
-  .pause(pause),
   .sync_id(sync_id),
 
   .request_id(request_id),

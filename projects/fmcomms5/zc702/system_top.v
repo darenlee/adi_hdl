@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -154,10 +154,6 @@ module system_top (
   wire            spi1_clk;
   wire            spi1_mosi;
   wire            spi1_miso;
-  wire            txnrx_0;
-  wire            enable_0;
-  wire            txnrx_1;
-  wire            enable_1;
 
   // multi-chip synchronization
 
@@ -225,6 +221,7 @@ module system_top (
   assign spi_clk = spi0_clk;
   assign spi_mosi = spi0_mosi;
   assign spi0_miso = spi_miso;
+  assign gpio_i[63:60] = gpio_o[63:60];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),

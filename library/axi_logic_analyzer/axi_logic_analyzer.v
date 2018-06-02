@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -192,7 +192,7 @@ module axi_logic_analyzer (
 
   generate
   for (i = 0 ; i < 16; i = i + 1) begin
-    assign data_t[i] = od_pp_n[i] ? io_selection[i] & !data_o[i] : io_selection[i];
+    assign data_t[i] = od_pp_n[i] ? io_selection[i] | data_o[i] : io_selection[i];
     always @(posedge clk_out) begin
       data_o[i] <= overwrite_enable[i] ? overwrite_data[i] : data_r[i];
     end

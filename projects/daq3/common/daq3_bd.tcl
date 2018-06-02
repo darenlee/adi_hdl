@@ -49,7 +49,7 @@ ad_ip_parameter axi_ad9680_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ad9680_dma CONFIG.ID 0
 ad_ip_parameter axi_ad9680_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9680_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ad9680_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad9680_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9680_dma CONFIG.CYCLIC 0
@@ -61,6 +61,13 @@ ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_instance util_adxcvr util_daq3_xcvr
 ad_ip_parameter util_daq3_xcvr CONFIG.RX_NUM_OF_LANES 4
 ad_ip_parameter util_daq3_xcvr CONFIG.TX_NUM_OF_LANES 4
+ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_REFCLK_DIV 1
+ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV_RATIO 1
+ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV 0x30; # 20
+ad_ip_parameter util_daq3_xcvr CONFIG.RX_OUT_DIV 1
+ad_ip_parameter util_daq3_xcvr CONFIG.TX_OUT_DIV 1
+ad_ip_parameter util_daq3_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
+ad_ip_parameter util_daq3_xcvr CONFIG.RX_CDR_CFG 0x0B000023FF10400020
 
 ad_connect  sys_cpu_resetn util_daq3_xcvr/up_rstn
 ad_connect  sys_cpu_clk util_daq3_xcvr/up_clk
@@ -91,6 +98,7 @@ ad_connect  util_daq3_xcvr/tx_out_clk_0 axi_ad9152_fifo/dac_clk
 ad_connect  axi_ad9152_jesd_rstgen/peripheral_reset axi_ad9152_fifo/dac_rst
 ad_connect  axi_ad9152_upack/dac_valid axi_ad9152_fifo/dac_valid
 ad_connect  axi_ad9152_upack/dac_data axi_ad9152_fifo/dac_data
+ad_connect  axi_ad9152_core/dac_dunf axi_ad9152_fifo/dac_dunf
 ad_connect  sys_cpu_clk axi_ad9152_fifo/dma_clk
 ad_connect  sys_cpu_reset axi_ad9152_fifo/dma_rst
 ad_connect  sys_cpu_clk axi_ad9152_dma/m_axis_aclk

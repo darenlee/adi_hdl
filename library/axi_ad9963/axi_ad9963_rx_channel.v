@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -160,6 +160,7 @@ module axi_ad9963_rx_channel #(
     .iqcor_coeff_2 (adc_iqcor_coeff_2_s));
 
   up_adc_channel #(
+    .COMMON_ID (6'h01),
     .CHANNEL_ID (CHANNEL_ID),
     .DATAFORMAT_DISABLE (DATAFORMAT_DISABLE),
     .DCFILTER_DISABLE (DCFILTER_DISABLE),
